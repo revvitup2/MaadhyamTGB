@@ -11,6 +11,6 @@ DOWNLOAD BELOW DEPENDANCIES BEFORE RUNNING
 - npm install react-bootstrap bootstrap --save
 - npm install react-csv --save  
 
-IF ALREADY DOWNLOADES, UPDATE USING
+FOR UPDATING EXISTING REACT,
 
 - npm update
