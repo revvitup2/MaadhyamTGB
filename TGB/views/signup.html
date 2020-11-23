@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Firebase Server Auth</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+
+    <link href="/register2/css/main.css" rel="stylesheet" media="all">
+    
+
+  </head>
+  <body>
+    <main>
+      <section>
+        <div class="page-wrapper bg-dark p-t-100 p-b-50">
+          <div class="wrapper wrapper--w900">
+              <div class="card card-6">
+                  <div class="card-heading">
+                      <h2 class="title">Admin Registration</h2>
+                  </div>
+                  <div class="card-body">
+                      <form id="signup" >
+                          <div class="form-row">
+                              <div class="name">Name*</div>
+                              <div class="value">
+                                  <input class="input--style-6" type="text" name="firstName" id="firstName"/>
+                              </div>
+                          </div>
+                          <div class="form-row">
+                              <div class="name">Email*</div>
+                              <div class="value">
+                                  <input class="input--style-6" type="text" name="login" id="login"/>
+                              </div>
+                          </div>
+              
+                          <div class="form-row">
+                              <div class="name">Password*</div>
+                              <div class="value">
+                                  <input class="input--style-6" type="password" name="password" id="password"/>
+                              </div>
+                          </div>
+   
+                          <div class="card-footer">
+                            <button id="signupb" class="btn btn--radius-2 btn--blue-2">Sign up</button>
+                        </div>
+                      </form>
+                  </div>
+                  
+              </div>
+          </div>
+      </div>
+      </section>
+
+      <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-database.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+
+
+      <script>
+
+    var firebaseConfig = {
+    apiKey: "AIzaSyBeKWzFNXwzmWrSeMXjVaSX_6HfYNiIXxU",
+    authDomain: "thegirlfriendbox-a277f.firebaseapp.com",
+    databaseURL: "https://thegirlfriendbox-a277f.firebaseio.com",
+    projectId: "thegirlfriendbox-a277f",
+    storageBucket: "thegirlfriendbox-a277f.appspot.com",
+    messagingSenderId: "28678379221",
+    appId: "1:28678379221:web:21f5b5d8aa046992ac745c",
+    measurementId: "G-6YK6D6YNHZ"
+  };
+    firebase.initializeApp(firebaseConfig);
+  
+            firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+          document.getElementById("signup").addEventListener("submit", (event) => {
+  
+              event.preventDefault();
+              const login = event.target.login.value;
+              const password = event.target.password.value;
+  
+  //            event.preventDefault();
+  
+              var firstName = document.getElementById('firstName');
+              var email = document.getElementById('login');
+              var passworddata = document.getElementById('password');
+              var btnsignup = document.getElementById('signupb');
+  
+              firebase.auth().createUserWithEmailAndPassword(login, password).then(({ user }) => {
+                  return user.getIdToken().then((idToken) => {
+                    return fetch("/sessionLogin", {
+                      method: "POST",
+                      headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        "CSRF-Token": Cookies.get("XSRF-TOKEN"),
+                      },
+                      body: JSON.stringify({ idToken }),
+  
+                    });
+                  });
+  
+                })
+  /*              .then(() => {
+                  return firebase.auth().signOut();
+                })*/
+                .then(() => {
+  
+                  var id = firebase.auth().currentUser.uid;
+                  firebase.database().ref('Admins/' + id).set({
+                    name: firstName.value,
+                    emailId: email.value,
+                    password: passworddata.value
+                  });
+                  console.log(id);
+      //            localStorage.setItem('Uid', id);
+                    var id = firebase.auth().currentUser.uid;
+                    localStorage.setItem('Uid', id);
+                  window.location.assign("/import");
+                });
+  
+              return false;
+            });
+  
+  
+         </script>
+    </main>
+  </body>
+</html>

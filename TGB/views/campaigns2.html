@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Campaigns</title>
+    
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+  </head>
+
+<body>
+
+  <nav class="navbar navbar-inverse  navbar-static-top example-8">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar8" aria-label="Toggle navigation" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand text-hide" href="#">Brand Text
+        </a>
+      </div>
+      <div id="navbar8" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li class=""><a href="/campaigns">CAMPAIGNS</a></li>
+          <li class=""><a href="/campaigns2">APPROVED_CAMPAIGNS</a></li>
+          <li class=""><a href="/sessionLogout">LOGOUT</a></li>
+          
+          
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+    <!--/.container-fluid -->
+  </nav>
+
+
+<div id="done" class="container">
+    
+</div>
+
+
+<script>
+
+var firebaseConfig = {
+    apiKey: "AIzaSyBeKWzFNXwzmWrSeMXjVaSX_6HfYNiIXxU",
+    authDomain: "thegirlfriendbox-a277f.firebaseapp.com",
+    databaseURL: "https://thegirlfriendbox-a277f.firebaseio.com",
+    projectId: "thegirlfriendbox-a277f",
+    storageBucket: "thegirlfriendbox-a277f.appspot.com",
+    messagingSenderId: "28678379221",
+    appId: "1:28678379221:web:21f5b5d8aa046992ac745c",
+    measurementId: "G-6YK6D6YNHZ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+
+
+  var arr=[]
+  var rootRef = firebase.database().ref();
+                var urlRef = rootRef.child('data/');
+                urlRef.once("value", function(snapshot) {
+
+                  var data1 = snapshot.val();
+                  
+                  snapshot.forEach(function(child2) {
+                      arr.push([child2.key,child2.val().name, child2.val().followers, child2.val().engagement_rate,child2.val().tags,child2.val().email,child2.val().phone_no,child2.val().addr1,child2.val().addr2,child2.val().city,child2.val().pincode,child2.val().barter,child2.val().cost_VideoPost,child2.val().cost_StaticPost,child2.val().cost_Reel,child2.val().cost_Story]);
+                          
+                    });
+          });
+
+
+
+
+
+var data2="";
+var count=0;
+//console.log(data2);
+var rootRef = firebase.database().ref();
+  var urlRef = rootRef.child('campaigns/');
+  urlRef.once("value", function(snapshot) {
+
+    data = snapshot.val();
+    cat=Object.keys(data);
+
+    snapshot.forEach(function(child) {
+      //console.log(localStorage.getItem("Uid"));
+      
+      if(localStorage.getItem("Uid")==child.val().ClientID && child.val().Status=="Approved")
+      {
+          
+        count+=1;client=child.val().ClientID; admin = child.val().AdminID; propid = child.val().ProposalID;status = child.val().Status; head = child.key;
+        //data2+='<div style="text-align:center" class="container panel panel-info"> ADMIN-ID: '+head+'&emsp; ADMIN-ID: '+head+'&emsp; ADMIN-ID: '+head+'&emsp; ADMIN-ID: '+head+'&emsp;<input class="btn btn-primary" type="button" value="Open Curtain" data-toggle="collapse" data-target="#collapseExample'+count+'"></input></div>\n\n';
+        data2 +=  '<table id="table1" class="table"> <thead> <tr class="center"> <th scope="col">Admin</th>&emsp; <th scope="col">Proposal ID</th>&emsp; <th scope="col">Status</th>&emsp; <th scope="col">Timestamp</th> </tr> </thead> <tbody >';
+        data2+='<tr> <td>'+admin+ '</td>&emsp; <td>'+propid+ '</td> &emsp; <td >'+status+ '</td> &emsp; <td >'+child.val().Timestamp+ '</td> <td>  <input class="btn btn-primary" type="button" value="Open Curtain" data-toggle="collapse" data-target="#collapseExample'+count+'"></input> </td> </tr>';
+        data2 +='</table>';
+        
+        data2+='<div class="collapse" id="collapseExample'+count+'">';
+        
+        data2 +='<table id="'+propid+'" style="border: 1px solid black;" class="table table-hover table-stripped"> <thead class="while black-text">';
+        //data2+=' <tr> <th scope="col">Admin</th> <th scope="col">Client</th> <th scope="col">ProposalID</th> <th scope="col">Status</th>  </tr>';
+        //data2+='</thead> <tbody> <div style="text-align: center;" class="form-group"> </div>\n <tr class="bg-primary"> <td>'+admin+ '</td> &emsp;&emsp; <td>'+client+ '</td> &emsp;&emsp;<td >'+propid+ '</td> <td >'+status+ '</td></tr>';
+
+        data2+='<tr> <th scope="col">Name</th>	<th scope="col">Followers</th>	<th scope="col">Engage_Rate</th>	<th scope="col">Tags</th>	<th scope="col">Email</th>	<th scope="col">Phone Number</th> <th scope="col">Address1</th>	<th scope="col">Address2</th> <th scope="col">City</th> <th scope="col">Pincode</th> <th scope="col">barter</th> <th scope="col">cost_VideoPost</th> <th scope="col">cost_StaticPost</th> <th scope="col">cost_Reel</th> <th scope="col">cost_Story</th>  </tr>\n';
+        
+            var len = child.val().data.length; var ment = child.val().data;
+
+                    for(i=0;i<arr.length;i++)
+                    {
+
+                          for(j=0;j<len;j++)
+                          {
+                                  
+                              if(arr[i][0] == ment[j])
+                              {   
+                                  
+                                  data2+='<tr class="bg-success"> <td>'+arr[i][1]+'</td> <td>'+arr[i][2]+'</td> <td>'+arr[i][3]+'</td>  <td>'+arr[i][4]+'</td>  <td>'+arr[i][5]+'</td>  <td>'+arr[i][6]+'</td>  <td>'+arr[i][7]+'</td>  <td>'+arr[i][8]+'</td>  <td>'+arr[i][9]+'</td>  <td>'+arr[i][10]+'</td> <td>'+arr[i][11]+'</td> <td>'+arr[i][12]+'</td> <td>'+arr[i][13]+'</td> <td>'+arr[i][14]+'</td> <td>'+arr[i][15]+'</td> </tr>';
+                              }
+                              
+                          }
+                    }
+
+
+          //console.log(child2.key[0]);
+          data2+='</table><hr></div>\n\n\n';
+      }
+        
+      });$("#done").append(data2);console.log(data2);
+      
+});
+
+
+
+var admin=client=propid="";
+var dataz="",carez=[],cell1="",cell2="",cell3="",cell4="";
+var darez=[];
+
+function adder(admin,client,propid)
+{
+    //console.log(admin,client,propid);
+    var newPostKey = firebase.database().ref().child('campaigns').push().key;
+    var dt = new Date();
+    var utcDate = dt.toUTCString();
+
+       firebase.database().ref('campaigns/'+ newPostKey).update({  AdminID:admin,
+         ClientID: client, ProposalID: propid, Status: "Pending", Timestamp: utcDate}); 
+
+
+
+          var table1 = document.getElementById(propid),
+                    checkboxes = document.getElementsByName(propid);
+
+          var len = table1.rows.length-1;
+          
+                    for(var i = 0; i < len; i++)
+                    {
+                      console.log(checkboxes[i].checked);
+                      
+                     
+                      if(checkboxes[i].checked)
+                        {
+                            console.log(table1.rows[i+1].cells[3].innerHTML);
+                            
+                            //cell1 = table1.rows[i+1].cells[0].innerHTML;
+                            //cell2 = table1.rows[i+1].cells[1].innerHTML;
+                            //cell3 = table1.rows[i+1].cells[2].innerHTML;
+                            cell4 = table1.rows[i+1].cells[3].innerHTML;
+                          
+                            carez.push([cell4]);
+                            
+
+                        }
+                    }console.table(carez);
+
+
+                        for (let i = 0; i < carez.length; i++) {
+                            //console.log(carez[1][0]);
+                            firebase.database().ref('campaigns/'+newPostKey+"/data").update({ [i] : carez[i][0]});
+                            
+                        }
+                        location.reload(); 
+                                      
+}
+
+
+</script>
+</body>
+</html>
