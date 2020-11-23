@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>import</title>
+    
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+  </head>
+
+<body>
+
+  <nav class="navbar navbar-inverse  navbar-static-top example-8">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar8" aria-label="Toggle navigation" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand text-hide" href="#">Brand Text
+        </a>
+      </div>
+      <div id="navbar8" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li class=""><a href="/import">HOME</a></li>
+          <li class=""><a href="/signup">ADMINS(+)</a></li>
+          <li class=""><a href="/signup2">CLIENTS(+)</a></li>
+          <li class=""><a href="/proposal">PROPOSALS</a></li>
+          <li class=""><a href="/request">REQUESTS</a></li>
+          <li class=""><a href="/sessionLogout">LOGOUT</a></li>
+          
+          
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+    <!--/.container-fluid -->
+  </nav>
+
+
+<div id="done" class="container">
+    
+</div>
+
+
+
+
+<script>
+
+var firebaseConfig = {
+    apiKey: "AIzaSyBeKWzFNXwzmWrSeMXjVaSX_6HfYNiIXxU",
+    authDomain: "thegirlfriendbox-a277f.firebaseapp.com",
+    databaseURL: "https://thegirlfriendbox-a277f.firebaseio.com",
+    projectId: "thegirlfriendbox-a277f",
+    storageBucket: "thegirlfriendbox-a277f.appspot.com",
+    messagingSenderId: "28678379221",
+    appId: "1:28678379221:web:21f5b5d8aa046992ac745c",
+    measurementId: "G-6YK6D6YNHZ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+
+var data1="";
+
+var jar="";
+var arr=[];
+sec();
+function sec()
+{
+  firebase.database().ref('Clients/').once('value').then(function(snapshot) {
+                data = snapshot.val();
+                snapshot.forEach(function(child) {
+                    
+                    arr.push([child.key,child.val().name]);
+                
+                });py();
+
+              });
+}
+   
+
+  var count=0;
+
+function py()
+{
+  var rootRef = firebase.database().ref();
+  var urlRef = rootRef.child('Proposals/');
+    urlRef.once("value", function(snapshot) {
+    snapshot.forEach(function(child) {
+    
+            a = child.val().receiverId;
+
+            for(i=0;i<arr.length;i++)
+            {
+                if(a==arr[i][0])
+                {
+                    jar = arr[i][1];
+                }
+            }
+            
+            console.table(arr);
+            console.log(jar);
+
+            b = child.val().senderId;
+            c = child.val().timestamp;
+            count+=1;
+            //document.getElementById('bro1').innerHTML = a;
+            //document.getElementById('bro2').innerHTML = b;
+            //document.getElementById('bro3').innerHTML = c;
+            //data1 +='<hr><div class="container panel panel-info"> ReceiverID: '+a+"<br><br>SenderID: "+b+"<br><br>Timestamp: "+c+'</div>'; 
+            data1 +=  '<table id="table1" class="table"> <thead> <tr> <th scope="col">Client</th> <th scope="col">Timestamp</th> </tr> </thead> <tbody >';
+            data1+='<tr> <td>'+jar+ '</td><td>'+c+ '</td> <td>  <input class="btn btn-primary" type="button" value="Open Curtain" data-toggle="collapse" data-target="#collapseExample'+count+'"></input> </td> </tr>';
+            data1 +='</table>';
+           
+            data1+='<div class="collapse" id="collapseExample'+count+'">';
+            data1 += '<table id="table2" class="table table-bordered"> <thead> <tr> <th style="border: 1px solid black;" scope="col">Name</th> <th style="border: 1px solid black;" scope="col">Followers</th> <th style="border: 1px solid black;" scope="col">Engagememt_rate</th> </tr> </thead> <tbody>';
+            
+
+    child.forEach(function(child2) {
+
+        child2.forEach(function(child3){
+
+              var emai = child3.val().name;
+              var nam = child3.val().followers;
+              var pass = child3.val().engagement_rate;
+              //console.log(z);
+              //data1+='<tr> <td>'+emai+ '</td> <td>'+nam+ '</td> <td >'+pass+ '</td> </tr>';
+              //data1+='<div class="collapse" id="collapseExample'+count+'">';
+              
+              data1+=' <tr> <td style="border: 1px solid black;">'+emai+ '</td> <td style="border: 1px solid black;">'+nam+ '</td> <td style="border: 1px solid black;">'+pass+ '</td>  </tr>';
+
+          });data1 +='</table> </div>';//console.log(data1);
+        
+	  
+    });
+	
+
+        
+      });$("#done").append(data1);
+	
+    });
+
+
+}
+
+
+
+
+
+
+
+
+
+
+    /*var data1="";var count=0;
+
+
+   firebase.database().ref('Proposals/').once('value').then(function(snapshot) {
+     
+     var data = snapshot.val();
+     console.log(data);
+     
+     snapshot.forEach(function(child){
+
+            a = child.val().receiverId;
+            b = child.val().senderId;
+            c = child.val().timestamp;
+            count+=1;
+            //document.getElementById('bro1').innerHTML = a;
+            //document.getElementById('bro2').innerHTML = b;
+            //document.getElementById('bro3').innerHTML = c;
+            //data1 +='<hr><div class="container panel panel-info"> ReceiverID: '+a+"<br><br>SenderID: "+b+"<br><br>Timestamp: "+c+'</div>'; 
+            data1 +=  '<table id="table1" class="table"> <thead> <tr> <th scope="col">Receiver</th> <th scope="col">Sender</th> <th scope="col">Timestamp</th> </tr> </thead> <tbody >';
+            data1+='<tr> <td>'+a+ '</td> <td>'+b+ '</td> <td >'+c+ '</td> <td>  <input class="btn btn-primary" type="button" value="Open Curtain" data-toggle="collapse" data-target="#collapseExample'+count+'"></input> </td> </tr>';
+            data1 +='</table>';data1+='<div class="collapse" id="collapseExample'+count+'"><div class="card card-body">Anim pariatur cliche reprehenderit</div></div>';
+
+            
+
+
+
+        
+      });console.log(a);console.log(b);console.log(c); console.log(data1);
+      
+}); */
+  
+
+</script>
+</body>
+</html>
