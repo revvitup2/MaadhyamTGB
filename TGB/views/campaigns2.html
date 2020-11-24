@@ -173,11 +173,12 @@ function adder(admin,client,propid)
 {
     //console.log(admin,client,propid);
     var newPostKey = firebase.database().ref().child('campaigns').push().key;
-    var dt = new Date();
-    var utcDate = dt.toUTCString();
+    const d= new Date();
+    date =d.getHours() + ":" + d.getMinutes() + "," + d.toDateString();
+    var dt= date;
 
        firebase.database().ref('campaigns/'+ newPostKey).update({  AdminID:admin,
-         ClientID: client, ProposalID: propid, Status: "Pending", Timestamp: utcDate}); 
+         ClientID: client, ProposalID: propid, Status: "Pending", Timestamp: dt}); 
 
 
 

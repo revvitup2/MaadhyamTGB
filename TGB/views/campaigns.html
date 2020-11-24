@@ -142,7 +142,7 @@ var rootRef = firebase.database().ref();
 
         //data2 += '<div> Email: '+e+'</div>'
         //data2 += '<div> FName: '+f+" "+l+'</div><br>'
-        data2+=' <tr style="border: 1px solid black;"> <td style="border: 1px solid black;">'+e+ '</td> <td style="border: 1px solid black;">'+f+ '</td> <td style="border: 1px solid black;" >'+l+ '</td> <td style="border: 1px solid black;" >'+keyz+ '</td><td style="border: 1px solid black;"> <input style="border: 1px solid black;" type="checkbox" name="'+propid+'"> </td> </tr>';
+        data2+=' <tr class="center" style="border: 1px solid black;"> <td style="border: 1px solid black;">'+e+ '</td> <td style="border: 1px solid black;">'+f+ '</td> <td style="border: 1px solid black;" >'+l+ '</td> <td style="border: 1px solid black;" >'+keyz+ '</td><td style="border: 1px solid black;"> <input style="border: 1px solid black;" type="checkbox" name="'+propid+'"> </td> </tr>';
         //console.log(child3.val().email);
         //console.log(child3.val().firstName);
         //console.log(child3.val().lastName);
@@ -168,12 +168,11 @@ function adder(admin,client,propid)
 {
     //console.log(admin,client,propid);
     var newPostKey = firebase.database().ref().child('campaigns').push().key;
-    var dt = new Date();
-    var utcDate = dt.toUTCString();
+    const d= new Date();
+    date =d.getHours() + ":" + d.getMinutes() + "," + d.toDateString();
+    var dt= date;
 
        
-
-
 
           var table1 = document.getElementById(propid),
                     checkboxes = document.getElementsByName(propid);
@@ -205,7 +204,7 @@ function adder(admin,client,propid)
                             for (let i = 0; i < carez.length; i++) {
                                 //console.log(carez[1][0]);
                                 firebase.database().ref('campaigns/'+ newPostKey).update({  AdminID:admin,
-         ClientID: client, ProposalID: propid, Status: "Pending", Timestamp: utcDate}); 
+         ClientID: client, ProposalID: propid, Status: "Pending", Timestamp: dt}); 
                                 firebase.database().ref('campaigns/'+newPostKey+"/data").update({ [i] : carez[i][0]});
                                 
                             }
