@@ -149,7 +149,7 @@
 
       <!--h1 id="base" style="text-align:center">CSV FILE</h1-->
       
-    <div id="radioscontainer">
+    <div id="radioscontainer" style="text-align: center;">
   </div>
   
 
@@ -240,7 +240,7 @@
 
 
   var data1="",count=0,dataz="";
-  data1+=  '<div class="container md-3 mt-3">';
+  data1+=  '<div class="container md-3 mt-3"><input type="text" id="searchTags" placeholder="Search Tags" /><br>Select All : <input type="checkbox" name="selectAll" id="selectAll">';
 data1+=  '<table id="table1" class="table  mydatatable" cellspacing="0" width="100%"> <thead> <tr> <th>ID</th> <th >Name</th> <th >Followers</th> <th >Engagement Rate</th> <th >Tags</th> <th >Cost/VideoPost</th> <th >Cost/StaticPost</th> <th >Cost/Reel</th> <th >Cost/Story</th> <th>Select</th></tr> </thead> <tbody>';
      firebase.initializeApp(firebaseConfig);
 
@@ -277,7 +277,35 @@ data1+=  '<table id="table1" class="table  mydatatable" cellspacing="0" width="1
       //console.log(data1);
       
       $("#radioscontainer").append(data1);
-      $('.mydatatable').DataTable();
+      var table = $('.mydatatable').DataTable();
+
+      // #column3_search is a <input type="text"> element
+      $('#searchTags').on( 'keyup', function () {
+          table
+              .columns( 4 )
+              .search( this.value )
+              .draw();
+      } );
+
+          // Setup - add a text input to each footer cell
+       
+          // // DataTable
+          // var table = $('.mydatatable').DataTable({
+          //     initComplete: function () {
+          //         // Apply the search
+          //         this.api().columns().every( function () {
+          //             var that = this;
+       
+          //             $( 'input', this.footer() ).on( 'keyup change clear', function () {
+          //                 if ( that.search() !== this.value ) {
+          //                     that
+          //                         .search( this.value )
+          //                         .draw();
+          //                 }
+          //             } );
+          //         } );
+          //     }
+          // });
       
       
       
@@ -533,10 +561,11 @@ function adder()
 
                 var table1 = document.getElementById("table1"),
                     table2 = document.getElementById("table2"),
-                    checkboxes = document.getElementsByName("check-tab1");
+                    checkboxes = document.getElementsByName("check-tab1"),
+                    selectAll = document.getElementById("selectAll");
               //console.log("Val1 = " + checkboxes.length);
                  for(var i = 0; i < checkboxes.length; i++)
-                     if(checkboxes[i].checked)
+                     if(selectAll.checked || checkboxes[i].checked)
                         {
                             // create new row and cells
                             
