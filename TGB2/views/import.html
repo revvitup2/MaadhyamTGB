@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>import</title>
+    
+  
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,700&display=swap" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.css"/>
+    
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+  </head>
+
+  <body>
+    
+  <header>
+
+    <nav class="navbar navbar-expand-lg navbar-dark indigo">
+      <a class="navbar-brand" href="#"><strong>ImportCSV</strong></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#"><i class="fas fa-house-damage"></i>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/signup"><i class="fas fa-plus-square"></i>Add Admins</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/signup2"><i class="far fa-address-book"></i>Add Clients</a>
+          </li>
+         
+          <li class="nav-item">
+            <a class="nav-link" href="/proposal"><i class="fas fa-location-arrow"></i>Proposals</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/request"><i class="fas fa-reply-all"></i>Approved_Campaigns</a>
+          </li>
+          <span class="border border-white">
+          <li class="nav-item">
+            <a class="nav-link" href="/sessionLogout"><i class="fas fa-sign-out-alt"></i>Logout</a>
+          </li>
+        </span>
+        </ul>
+      </div>
+    </nav>
+  
+    <div class="view intro-2">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text">
+            <div class="white-text text-center wow fadeInUp">
+              <h2>This Navbar is fixed</h2>
+              <h5>It will always stay visible on the top, even when you scroll down</h5>
+              <br>
+              <p>Full page intro with background image will be always displayed in full screen mode, regardless
+                of device </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </header>
+
+
+<div class="container modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog modal-md">
+  
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 style="text-align: center;" class="modal-title" id="last">Members</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        
+      </div>
+      
+      <div class="modal-body">
+        <form class="col" id='addQuantity'>
+          
+          
+          <div >
+                
+          </div>
+          
+          <div class="form-group">
+                <label for="uname">Clients:&emsp;</label>
+                <select id="list" style="padding: 15px;">
+                  
+                </select> 
+          </div>
+          
+          <!--div class="form-group">
+                <label for="uname">Client ID:&emsp;&emsp;&nbsp;</label>
+                <input type="text" class="form" id="stock" placeholder="ID" name="stock" required>  
+          </div-->
+          
+          <div style="text-align: center;" class="form-group">
+          <button class="btn-lg btn btn-success" onclick="Alert()" >Send</button>
+          </div>
+        
+    
+    </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+
+
+  <br>
+    <div  class="container" id='buttondiv'>
+      &emsp;&emsp;<input class="inputfile" type='file' id='inputfile' />    <br> <br>  
+      <button class="btn btn-primary" id='viewfile' >Import file</button>
+      <button class="btn btn-success" id='downfile'>Download file</button>
+      
+    </div>
+
+    <!--div class="container" id="container">
+        <table class="gridtable" id="tableMain">
+            
+            <tbody>
+
+            </tbody>
+          </table>
+      </div-->
+
+
+      <!--h1 id="base" style="text-align:center">CSV FILE</h1-->
+      
+    <div id="radioscontainer">
+  </div>
+  
+
+  <div style="padding-bottom: 40px;" class="text-center">
+  <button onclick="adder()" class="btn btn-primary btn-lg btn-rounded" type="button" id='addfile'>ADD</button>
+</div>
+
+<h2 style="text-align: center;">Selected Items</h2>
+<div class="tab">
+  
+  <table class="table" id="table2" border="1">
+      <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Followers</th>
+          <th>Engagement rate</th>
+          <th>Tags</th>
+          <th scope="col">Cost/VideoPost</th><th scope="col">Cost/StaticPost</th> <th scope="col">Cost/Reel</th> <th scope="col">Cost/Story</th><th scope="col">External_Cost</th>
+          <th>Select</th>  
+      </tr>
+  </table>
+  
+</div>
+
+<div style="padding-bottom: 40px;" class="text-center">
+<button onclick="remove()" class="btn btn-dark btn-lg" type="button" id='remfile'>Remove</button>
+<button onclick="delee()" class="btn btn-danger btn-lg" type="button">DELETE</button>
+</div>
+
+<div style="text-align: center;padding-bottom: 40px;" class="text-center">
+
+
+<form class="container md-3 mt-3 form-inline">
+    
+  <div class="form-group mb-2">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+    <label class="form-check-label" for="defaultCheck1">
+      Name of the Campaign:
+    </label>&emsp;&emsp;
+    
+    <input type="text" class="form-control" id="camp" placeholder="Write here!">&emsp;&emsp;
+  </div>
+  
+  <div class="form-group">
+    <label for="uname">Cost:&emsp;</label>
+    <select id="deli" style="padding: 10px 15px;">
+        <option value="cost_StaticPost">cost_StaticPost</option>
+        <option value="cost_VideoPost">cost_VideoPost</option>
+        <option value="cost_Reel">cost_Reel</option>
+        <option value="cost_Story">cost_Story</option>
+    </select> 
+  </div>
+
+
+  <!--button type="submit" class="btn btn-info mb-2">Done</button-->
+</form>
+ 
+<button onclick="sender()" data-toggle="modal" data-target="#myModal" class="btn btn-success btn-lg" type="button" id='sendfile'>SEND for Approval</button>
+</div>
+
+
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.js"></script>
+
+
+<script>
+
+  
+
+ var firebaseConfig = {
+    apiKey: "AIzaSyBeKWzFNXwzmWrSeMXjVaSX_6HfYNiIXxU",
+    authDomain: "thegirlfriendbox-a277f.firebaseapp.com",
+    databaseURL: "https://thegirlfriendbox-a277f.firebaseio.com",
+    projectId: "thegirlfriendbox-a277f",
+    storageBucket: "thegirlfriendbox-a277f.appspot.com",
+    messagingSenderId: "28678379221",
+    appId: "1:28678379221:web:21f5b5d8aa046992ac745c",
+    measurementId: "G-6YK6D6YNHZ"
+  };
+  
+
+
+  var data1="",count=0,dataz="";
+  data1+=  '<div class="container md-3 mt-3">';
+data1+=  '<table id="table1" class="table  mydatatable" cellspacing="0" width="100%"> <thead> <tr> <th>ID</th> <th >Name</th> <th >Followers</th> <th >Engagement Rate</th> <th >Tags</th> <th >Cost/VideoPost</th> <th >Cost/StaticPost</th> <th >Cost/Reel</th> <th >Cost/Story</th> <th>Select</th></tr> </thead> <tbody>';
+     firebase.initializeApp(firebaseConfig);
+
+       var numbers;
+       var cat;
+
+     firebase.database().ref('data/').once('value').then(function(snapshot) {
+     
+     var data = snapshot.val();
+     //console.log(data);
+     var leng=Object.keys(data);
+      //console.log(leng);
+	    var list = leng.length;
+      console.log(list);
+     var i=0;
+     snapshot.forEach(function(child){
+      
+        var name= child.val().name;
+        var fname=child.val().followers;
+        var lname=child.val().engagement_rate;
+        var emi=child.val().tags;
+        var c1=child.val().cost_VideoPost;
+        var c2=child.val().cost_StaticPost;
+        var c3=child.val().cost_Reel;
+        var c4=child.val().cost_Story;
+
+        count+=1;
+        var idcount = "mycheck"+count;
+        data1+='<tr> <td>'+leng[i]+ '</td> <td>'+name+ '</td> <td>'+fname+ '</td> <td >'+lname+ '</td> <td >'+emi+ '</td> <td >'+c1+ '</td><td >'+c2+ '</td><td >'+c3+ '</td><td >'+c4+ '</td> <td><input type="checkbox" name="check-tab1"> </td> </tr>';
+        i+=1;
+        
+      });
+      data1+='</tbody></table></div>';
+      //console.log(data1);
+      
+      $("#radioscontainer").append(data1);
+      $('.mydatatable').DataTable();
+      
+      
+      
+});
+
+
+var arrz=[];arrx=[];
+
+
+var arrd=[];
+
+firebase.database().ref('data/').once('value').then(function(snapshot) {
+     
+     var data = snapshot.val();
+
+     snapshot.forEach(function(child){
+
+                                    arrd.push([child.val().name, child.val().followers,child.val().engagement_rate,child.val().tags,child.val().email,child.val().phone_no,child.val().addr1,child.val().addr2,child.val().city,child.val().pincode,child.val().barter,child.val().cost_VideoPost,child.val().cost_StaticPost,child.val().cost_Reel,child.val().cost_Story,child.key]);
+                                     
+                                  });console.table(arrd);
+                              });   
+
+
+/*
+var rootRef = firebase.database().ref();
+                              var urlRef = rootRef.child('data/');
+                              urlRef.once("value", function(snapshot) {
+
+                                var data1 = snapshot.val();
+                                
+                                snapshot.forEach(function(child2) {
+                                    arrz.push([child2.val().firstName, child2.val().lastName,child2.val().email]);
+                                        
+                                  });
+                              });console.log(arrz);  */
+
+
+    $( document ).ready(function() {
+
+            $('#viewfile').click(function () {
+
+                var rdr = new FileReader();
+                rdr.onload = function (e) {
+                  //get the rows into an array
+
+                  var therows = e.target.result.split("\n");
+                  //loop through the rows
+                  for (var row = 0; row < therows.length; row++ ) {
+                    //build a new table row
+                    var newrow = "";
+                    //get the columns into an array
+                    var columns = therows[row].split(",");
+                    //get number of columns
+                    var colcount=columns.length;
+                    console.log(colcount);
+
+                  
+
+                        console.log(columns[0]);
+                        
+
+                        var  name= columns[0];
+                        var  followers= columns[1];
+                        var  engagement_rate=columns[2];
+                        var  tags= columns[3];
+                        var  email= columns[4];
+                        var  phone_no= columns[5];
+                        var  addr1= columns[6];
+                        var  addr2= columns[7];
+                        var  city= columns[8];
+                        var  pincode= columns[9];
+                        var  barter= columns[10];
+                        var  cost_VideoPost= columns[11];
+                        var  cost_StaticPost= columns[12];
+                        var  cost_Reel= columns[13];
+                        var  cost_Story= columns[14];
+
+                        console.log(arrz);
+
+                        arrz.push([name,followers,engagement_rate,tags,email,phone_no,addr1,addr2,city,pincode,barter,cost_VideoPost,cost_StaticPost,cost_Reel,cost_Story]);
+                        //console.log(arrz);
+                 
+
+                        var stringArray = arrz.map(JSON.stringify);
+                          var uniqueStringArray = new Set(stringArray);
+                          //console.log(uniqueStringArray);
+
+                          //var uniqueArray = Array.from(uniqueStringArray);
+                          //console.log(uniqueArray);
+                          var uniqueArray = Array.from(uniqueStringArray, JSON.parse);
+                          console.log(uniqueArray);
+
+                        
+                        
+                     
+          //console.log(arrz.length);
+        
+          }
+          
+          console.table(arrd);
+
+          for(i=0;i<arrd.length;i++)
+          {
+            for(j=0;j<uniqueArray.length;j++)
+            {
+                if(arrd[i][4]==uniqueArray[j][4])
+                {
+                  var data={
+                              
+                              name: uniqueArray[j][0],
+                              followers: uniqueArray[j][1],
+                              engagement_rate: uniqueArray[j][2],
+                              tags: uniqueArray[j][3],
+                              email: uniqueArray[j][4],
+                              phone_no: uniqueArray[j][5],
+                              addr1: uniqueArray[j][6],
+                              addr2: uniqueArray[j][7],
+                              city: uniqueArray[j][8],
+                              pincode: uniqueArray[j][9],
+                              barter: uniqueArray[j][10],
+                              cost_VideoPost: uniqueArray[j][11],
+                              cost_StaticPost: uniqueArray[j][12],
+                              cost_Reel: uniqueArray[j][13],
+                              cost_Story: uniqueArray[j][14],
+                          }
+                          
+                        //console.log(id1==="");
+                        var newPostKey = firebase.database().ref().child('data').push().key;
+                        console.log(data);
+                        firebase.database().ref('data/'+ arrd[i][15]).update(data);
+                        uniqueArray.splice(j, 1);
+                }
+            }
+
+          }
+          console.log(uniqueArray);
+          for(i=1;i<uniqueArray.length-1;i++)
+          {
+              
+              var data={
+                          
+                            name: uniqueArray[i][0],
+                            followers: uniqueArray[i][1],
+                            engagement_rate: uniqueArray[i][2],
+                            tags: uniqueArray[i][3],
+                            email: uniqueArray[i][4],
+                            phone_no: uniqueArray[i][5],
+                            addr1: uniqueArray[i][6],
+                            addr2: uniqueArray[i][7],
+                            city: uniqueArray[i][8],
+                            pincode: uniqueArray[i][9],
+                            barter: uniqueArray[i][10],
+                            cost_VideoPost: uniqueArray[i][11],
+                            cost_StaticPost: uniqueArray[i][12],
+                            cost_Reel: uniqueArray[i][13],
+                            cost_Story: uniqueArray[i][14],
+                        }
+                        
+                      //console.log(id1==="");
+                      var newPostKey = firebase.database().ref().child('data').push().key;
+                      console.log(data);
+                      firebase.database().ref('data/'+ newPostKey).update(data);
+          } 
+          
+          
+          console.table(uniqueArray);
+                }
+                rdr.readAsText($("#inputfile")[0].files[0]);location.reload(0);
+            });
+        });
+
+
+
+ 
+
+
+
+
+$("#downfile").click(function() {
+
+console.table(arrd); 
+//var json_pre = '[{"Id":"Header A1","UserName":"Header B1"}';
+
+var json_pre='[{"col1":"Name","col2":"Followers","col3":"Engagement_rate","col4":"Tags","col5":"email","col6":"phone_no","col7":"addr1","col8":"addr2","col9":"city","col10":"pincode","col11":"barter","col12":"cost_VideoPost","col13":"cost_StaticPost","col14":"cost_Reel"}';
+for(i=0;i<arrd.length;i++)
+{
+  json_pre += ',{"col1":"'+arrd[i][0]+'","col2":"'+arrd[i][1]+'","col3":"'+arrd[i][2]+'","col4":"'+arrd[i][3]+'","col5":"'+arrd[i][4]+'","col6":"'+arrd[i][5]+'","col7":"'+arrd[i][6]+'","col8":"'+arrd[i][7]+'","col9":"'+arrd[i][8]+'","col10":"'+arrd[i][9]+'","col11":"'+arrd[i][10]+'","col12":"'+arrd[i][11]+'","col13":"'+arrd[i][12]+'","col14":"'+arrd[i][13]+'"}';
+}
+  
+json_pre+=']';
+console.log(json_pre);
+
+var json = $.parseJSON(json_pre);
+
+var csv = JSON2CSV(json);
+var downloadLink = document.createElement("a");
+var blob = new Blob(["\ufeff", csv]);
+var url = URL.createObjectURL(blob);
+downloadLink.href = url;
+downloadLink.download = "data.csv";
+
+document.body.appendChild(downloadLink);
+downloadLink.click();
+document.body.removeChild(downloadLink);
+});
+
+function JSON2CSV(objArray) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    var str = '';
+    var line = '';
+
+    if ($("#labels").is(':checked')) {
+        var head = array[0];
+        if ($("#quote").is(':checked')) {
+            for (var index in array[0]) {
+                var value = index + "";
+                line += '"' + value.replace(/"/g, '""') + '",';
+            }
+        } else {
+            for (var index in array[0]) {
+                line += index + ',';
+            }
+        }
+
+        line = line.slice(0, -1);
+        str += line + '\r\n';
+    }
+
+    for (var i = 0; i < array.length; i++) {
+        var line = '';
+
+        if ($("#quote").is(':checked')) {
+            for (var index in array[i]) {
+                var value = array[i][index] + "";
+                line += '"' + value.replace(/"/g, '""') + '",';
+            }
+        } else {
+            for (var index in array[i]) {
+                line += array[i][index] + ',';
+            }
+        }
+
+        line = line.slice(0, -1);
+        str += line + '\r\n';
+    }
+    return str;
+}
+
+
+var arrm=[],arrc=[];
+function adder()
+{
+
+                var table1 = document.getElementById("table1"),
+                    table2 = document.getElementById("table2"),
+                    checkboxes = document.getElementsByName("check-tab1");
+              //console.log("Val1 = " + checkboxes.length);
+                 for(var i = 0; i < checkboxes.length; i++)
+                     if(checkboxes[i].checked)
+                        {
+                            // create new row and cells
+                            
+                            var newRow = table2.insertRow(table2.length),
+                                cell1 = newRow.insertCell(0),
+                                cell2 = newRow.insertCell(1),
+                                cell3 = newRow.insertCell(2);
+                                cell4 = newRow.insertCell(3);
+                                cell5 = newRow.insertCell(4);
+                                cell6 = newRow.insertCell(5);
+
+                                cell7 = newRow.insertCell(6);
+                                cell8 = newRow.insertCell(7);
+                                cell9 = newRow.insertCell(8);
+                                cell10 = newRow.insertCell(9);
+                                cell11 = newRow.insertCell(10);
+                            // add values to the cells
+                           
+                            cell1.innerHTML = table1.rows[i+1].cells[0].innerHTML;
+                            cell2.innerHTML = table1.rows[i+1].cells[1].innerHTML;
+                            cell3.innerHTML = table1.rows[i+1].cells[2].innerHTML;
+                            cell4.innerHTML = table1.rows[i+1].cells[3].innerHTML;
+                            cell5.innerHTML = table1.rows[i+1].cells[4].innerHTML;
+                            
+                            cell6.innerHTML = table1.rows[i+1].cells[5].innerHTML;
+                            cell7.innerHTML = table1.rows[i+1].cells[6].innerHTML;
+                            cell8.innerHTML = table1.rows[i+1].cells[7].innerHTML;
+                            cell9.innerHTML = table1.rows[i+1].cells[8].innerHTML;
+                            //cell10.innerHTML = '<textarea id="form7" class="md-textarea form-control" rows="1"></textarea>';
+                            cell10.innerHTML = '<input type="text" id="'+cell1.innerHTML+'" value="">';
+
+                            cell11.innerHTML = "<input type='checkbox' name='check-tab2'>";
+                            //console.log(document.getElementById("form7").value);
+                            arrm.push(cell1.innerHTML);
+                            console.log(arrm);
+                            // remove the transfered rows from the first table [table1]
+                            var index = table1.rows[i+1].rowIndex;
+                            table1.deleteRow(index);
+                            console.log(index);
+                            
+                            
+                            // we have deleted some rows so the checkboxes.length have changed
+                            // so we have to decrement the value of i
+                            i--;
+                           console.log(checkboxes.length);
+
+                            
+                          
+                        }
+                        
+                        //console.log(a);
+                        
+                        
+
+                    
+            
+}
+
+function delee()
+{
+
+  if(arrm.length<1)
+    {
+      location.reload(0);
+    }
+    
+  var answer = confirm("Are you sure you want to delete this item? \nPress OK to continue")
+  if(answer)
+  {
+    for(i=0;i<arrm.length;i++)
+    {
+        console.table(arrm);
+        firebase.database().ref('data/'+arrm[i]).remove();
+        
+    }
+    location.reload(0);
+  }
+
+}
+
+
+function remove()
+            {
+                var table1 = document.getElementById("table1"),
+                    table2 = document.getElementById("table2"),
+                    checkboxes = document.getElementsByName("check-tab2");
+            console.log("Val1 = " + checkboxes.length);
+                 for(var i = 0; i < checkboxes.length; i++)
+                     if(checkboxes[i].checked)
+                        {
+                            // create new row and cells
+                            var newRow = table1.insertRow(table1.length),
+                                cell1 = newRow.insertCell(0),
+                                cell2 = newRow.insertCell(1),
+                                cell3 = newRow.insertCell(2),
+                                cell4 = newRow.insertCell(3),
+                                cell5 = newRow.insertCell(4);
+                                cell6 = newRow.insertCell(5);
+
+                                cell7 = newRow.insertCell(6);
+                                cell8 = newRow.insertCell(7);
+                                cell9 = newRow.insertCell(8);
+                                cell10 = newRow.insertCell(9);
+                                //cell11 = newRow.insertCell(10);
+
+                            // add values to the cells
+                            
+
+                            cell1.innerHTML = table2.rows[i+1].cells[0].innerHTML;
+                            cell2.innerHTML = table2.rows[i+1].cells[1].innerHTML;
+                            cell3.innerHTML = table2.rows[i+1].cells[2].innerHTML;
+                            cell4.innerHTML = table2.rows[i+1].cells[3].innerHTML;
+                            cell5.innerHTML = table2.rows[i+1].cells[4].innerHTML;
+
+                            cell6.innerHTML = table2.rows[i+1].cells[5].innerHTML;
+                            cell7.innerHTML = table2.rows[i+1].cells[6].innerHTML;
+                            cell8.innerHTML = table2.rows[i+1].cells[7].innerHTML;
+                            cell9.innerHTML = table2.rows[i+1].cells[8].innerHTML;
+                            
+                            cell10.innerHTML = "<input type='checkbox' name='check-tab1'>";
+
+                            
+
+                            // remove the transfered rows from the second table [table2]
+                            var index = table2.rows[i+1].rowIndex;
+                            table2.deleteRow(index);
+                            // we have deleted some rows so the checkboxes.length have changed
+                            // so we have to decrement the value of i
+                            i--;
+                           console.log(checkboxes.length);
+                           
+                        }
+            }
+
+var dataz="",carez=[],cell1="",cell2="",cell3="",cell5="",name1="",data="",k="";
+var darez=[];
+function sender()
+{
+  
+  //console.log(document.getElementById("form7").value);
+
+  var table2 = document.getElementById("table2"),
+                    checkboxes = document.getElementsByName("check-tab2");
+                    //console.log(table2);
+            //console.log("Val1 = " + checkboxes.length);
+                 for(var i = 0; i < checkboxes.length; i++)
+                  {
+                            
+                            
+                            //console.log(typeof(cell1));
+                            cell1 = table2.rows[i+1].cells[0].innerHTML;
+                            cell2 = table2.rows[i+1].cells[1].innerHTML;
+                            cell3 = table2.rows[i+1].cells[2].innerHTML;
+                            cell4 = table2.rows[i+1].cells[3].innerHTML;
+                            //cell1.trim();
+                         
+                            console.log(cell3);
+                            cell5 = document.getElementById(cell1).value;
+
+                            dataz+=cell1+"  ";dataz+=cell2+"   ";dataz+=cell3+"  ";dataz+=cell4;
+                            carez.push([cell1,cell2,cell3,cell4,cell5]);
+                            
+
+                            //var index = table2.rows[i+1].rowIndex;
+                            
+                           
+                           //console.log(index);
+                  }console.log(dataz);console.table(carez);
+                  
+
+       var numbers;
+       var cat;
+       
+        firebase.database().ref('Clients/').once('value').then(function(snapshot) {
+       data = snapshot.val();
+       cat=Object.keys(data);
+
+          
+      var i=0;
+       for (i = 0 ; i<cat.length; i++)
+       {
+          //console.log(cat[i]);
+          firebase.database().ref('Clients/'+cat[i]).once('value').then(function(snapshot) {
+            data = snapshot.val();
+            
+            
+		         a = snapshot.val().name;
+             b = snapshot.val().emailId;
+             //console.log(a);
+             var name="<option value="+a+">"+a+"</option>";
+             $("#list").append(name);
+            
+
+          });
+
+       }
+
+      });
+      console.table(darez);
+
+}
+
+
+function Alert()
+{
+  var newPostKey = firebase.database().ref().child('Proposals/').push().key;
+  document.getElementById("addQuantity").addEventListener('submit', (event) => {
+        event.preventDefault();
+        var name1 = document.getElementById('list').value;
+        var camp = document.getElementById('camp').value;
+        var deli = document.getElementById('deli').value;
+        console.log(deli);
+
+        firebase.database().ref('Clients/').once('value').then(function(snapshot) {
+       
+       var data = snapshot.val();
+       
+       snapshot.forEach(function(child){
+        
+          var name= child.val().name;
+          if(name == name1)
+          {
+            //console.log("--------------------"+child.key);
+            //console.log(firebase.auth().currentUser.email);
+            firebase.database().ref('Proposals/'+newPostKey).update({ receiverId:child.key});
+            firebase.database().ref('Proposals/'+newPostKey).update({ senderId:localStorage.getItem("Uid")});
+            
+            const d= new Date();
+            date =d.getHours() + ":" + d.getMinutes() + "," + d.toDateString();
+            var dt= date;;
+            
+            //Print results
+            //console.log(utcDate);
+            firebase.database().ref('Proposals/'+newPostKey).update({ timestamp:dt,name: camp,deliverable: deli, status:"Pending"});
+          }
+          
+        });
+
+  });
+
+});
+
+  me(carez,newPostKey);   
+  console.table(carez); 
+
+  var darez=[];
+  /*
+  firebase.database().ref('data/').once('value').then(function(snapshot) {
+                                
+                                data = snapshot.val();
+                                for (let i = 0; i < carez.length; i++) {  
+                                        var cell3 = carez[i][2];
+                                        console.log(cell3);
+
+                                snapshot.forEach(function(child){
+                                    
+                                    name1 = child.val().email;
+                                    //console.log(name1+"=="+cell3);
+                                    
+                                          if(name1 == cell3)
+                                          {
+                                              //console.log(name1);
+                                              console.log(child.key);
+                                              k = child.key;
+                                              darez.push([k]);
+                                              //console.table(darez);
+                                              //firebase.database().ref('Proposals/'+newPostKey).update({ k });
+                                              
+
+                                          }
+                                     
+                                });
+                              }me(darez,newPostKey);
+                            });
+
+  console.table(darez); */
+
+    
+}
+
+
+
+var v=[],n1="";
+function me(v,n1)
+{
+    console.table(v);
+    console.log(n1);
+    var newPostKey1 = firebase.database().ref().child('Proposals').push().key;
+    for (let i = 0; i < carez.length; i++) {
+      
+        firebase.database().ref('Proposals/'+n1+'/'+"data"+'/'+carez[i][0]).update({  name:carez[i][1],followers:carez[i][2],
+         engagement_rate: carez[i][3],cost:carez[i][4]});
+         
+    }
+    location.reload();
+    
+}
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Campaigns</title>
+    
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,700&display=swap" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+  </head>
+
+<body>
+
+  <header>
+
+    <nav class="navbar navbar-expand-lg navbar-dark indigo">
+      <a class="navbar-brand" href="#"><strong>ImportCSV</strong></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/campaigns"><i class="fas fa-home"></i>Campaigns</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/campaigns2"><i class="fas fa-plus-square"></i>APPROVED_CAMPAIGNS</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/sessionLogout"><i class="fas fa-sign-out-alt"></i>LOGOUT</a>
+          </li>
+         
+        </ul>
+      </div>
+    </nav>
+  
+    <div class="view intro-2">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text">
+            <div class="white-text text-center wow fadeInUp">
+              <h2>This Navbar is fixed</h2>
+              <h5>It will always stay visible on the top, even when you scroll down</h5>
+              <br>
+              <p>Full page intro with background image will be always displayed in full screen mode, regardless
+                of device </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </header>
+
+  <!--nav class="navbar navbar-inverse  navbar-static-top example-8">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar8" aria-label="Toggle navigation" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand text-hide" href="#">Brand Text
+        </a>
+      </div>
+      <div id="navbar8" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li class=""><a href="/campaigns">CAMPAIGNS</a></li>
+          <li class=""><a href="/campaigns2">APPROVED_CAMPAIGNS</a></li>
+          <li class=""><a href="/sessionLogout">LOGOUT</a></li>
+          
+          
+        </ul>
+      </div>
+      
+    </div>
+   
+  </nav-->
+
+
+<div id="done" class="container">
+    
+</div>
+
+
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.js"></script>
+
+<script>
+
+var firebaseConfig = {
+    apiKey: "AIzaSyBeKWzFNXwzmWrSeMXjVaSX_6HfYNiIXxU",
+    authDomain: "thegirlfriendbox-a277f.firebaseapp.com",
+    databaseURL: "https://thegirlfriendbox-a277f.firebaseio.com",
+    projectId: "thegirlfriendbox-a277f",
+    storageBucket: "thegirlfriendbox-a277f.appspot.com",
+    messagingSenderId: "28678379221",
+    appId: "1:28678379221:web:21f5b5d8aa046992ac745c",
+    measurementId: "G-6YK6D6YNHZ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+
+  var arr=[];
+  firebase.database().ref('Admins/').once('value').then(function(snapshot) {
+                data = snapshot.val();
+                snapshot.forEach(function(child) {
+                    
+                    arr.push([child.key,child.val().name]);
+                
+                });py();
+
+              });
+
+
+
+var data2="";jar="";
+var count=0;
+//console.log(data2);
+
+function py()
+{
+  console.log(arr);
+var rootRef = firebase.database().ref();
+  var urlRef = rootRef.child('campaigns/');
+  urlRef.once("value", function(snapshot) {
+
+    data = snapshot.val();
+    cat=Object.keys(data);
+
+    snapshot.forEach(function(child) {
+      //console.log(child.key);
+      
+      if(localStorage.getItem("Uid")==child.val().ClientID && child.val().Status=="Approved")
+      {
+        count+=1;var client=child.val().ClientID;var admin = child.val().AdminID;var propid = child.val().ProposalID;
+
+        for(i=0;i<arr.length;i++)
+            {
+                if(admin==arr[i][0])
+                {
+                    jar = arr[i][1];
+                }
+            }
+
+        data2 +=  '<table id="table1" class="table"> <thead> <tr class="center"> <th scope="col">Sender Name</th>&emsp; <th scope="col">Proposal ID</th>&emsp;  <th scope="col">Timestamp</th> <th scope="col">Name</th> <th scope="col">Deliverable</th> <th scope="col">Status</th> </tr> </thead> <tbody >';
+        data2+='<tr> <td>'+jar+ '</td>&emsp; <td>'+propid+ '</td> &emsp; &emsp; <td >'+child.val().Timestamp+ '</td> <td >'+child.val().Name+ '</td> <td >'+child.val().Deliverable+ '</td> <td>'+child.val().Status+ '</td><td>  <input class="btn btn-primary" type="button" value="Open Curtain" data-toggle="collapse" data-target="#collapseExample'+count+'"></input> </td> </tr>';
+        data2 +='</table>';
+        data2+='<div class="collapse" id="collapseExample'+count+'">';
+        data2 +='<table id="'+propid+'" style="border: 1px solid black;" class="table table-hover table-stripped"> <thead> <tr> <th style="border: 1px solid black;" scope="col">Name</th> <th style="border: 1px solid black;" scope="col">Followers</th> <th  style="border: 1px solid black;" scope="col">Engagement_Rate</th> <th style="border: 1px solid black;" scope="col">Keys</th> <th style="border: 1px solid black;" scope="col">Cost</th> </tr> </thead> <tbody> <div style="text-align: center;" class="form-group"> <!--button class="btn-lg btn btn-success" onclick="adder(\''+admin+'\',\''+client+'\',\''+propid+'\')">Approve</button--> </div>';
+         
+        //console.log(child.val().senderId);
+      }
+
+      
+    child.forEach(function(child2) {
+      
+      //console.log(child2.val());
+      
+    child2.forEach(function(child3) {
+      
+       
+      console.log(Object.keys(child.val()));
+      if(localStorage.getItem("Uid")==child.val().ClientID && child.val().Status=="Approved" )
+      {
+        
+        console.log("111111111");
+        var e = child3.val().name;        
+
+        var f = child3.val().followers;
+
+        var l = child3.val().rate;
+
+        var c = child3.val().cost;
+
+        //data2 += '<div> Email: '+e+'</div>'
+        //data2 += '<div> FName: '+f+" "+l+'</div><br>'
+        data2+=' <tr class="center" style="border: 1px solid black;"> <td style="border: 1px solid black;">'+e+ '</td> <td style="border: 1px solid black;">'+f+ '</td>  <td style="border: 1px solid black;" >'+l+ '</td> <td style="border: 1px solid black;" >'+propid+ '</td> <td style="border: 1px solid black;">'+c+ '</td> </tr>';
+        //console.log(child3.val().email);
+        //console.log(child3.val().firstName);
+        //console.log(child3.val().lastName);
+      }
+      //console.log(localStorage.getItem("Uid"));
+      //console.log(data2);
+      
+      
+    });
+    
+  });data2+='</table><hr></div>';
+});
+$("#done").append(data2);//console.log(data2);
+});
+}
+
+
+var admin=client=propid="";
+var dataz="",carez=[],cell1="",cell2="",cell3="",cell4="";
+var darez=[];
+
+function adder(admin,client,propid)
+{
+    //console.log(admin,client,propid);
+    var newPostKey = firebase.database().ref().child('campaigns').push().key;
+    const d= new Date();
+    date =d.getHours() + ":" + d.getMinutes() + "," + d.toDateString();
+    var dt= date;
+
+       
+
+          var table1 = document.getElementById(propid),
+                    checkboxes = document.getElementsByName(propid);
+
+          var len = table1.rows.length-1;
+          
+                    for(var i = 0; i < len; i++)
+                    {
+                      console.log(checkboxes[i].checked);
+                      
+                     
+                      if(checkboxes[i].checked)
+                        {
+                            console.log(table1.rows[i+1].cells[3].innerHTML);
+                            
+                            cell1 = table1.rows[i+1].cells[0].innerHTML;
+                            cell2 = table1.rows[i+1].cells[1].innerHTML;
+                            cell3 = table1.rows[i+1].cells[2].innerHTML;
+                            cell4 = table1.rows[i+1].cells[3].innerHTML;
+                            cell5 = table1.rows[i+1].cells[4].innerHTML;
+                          
+                            carez.push([cell1,cell2,cell3,cell4,cell5]);
+                            
+
+                        }
+                    }console.table(carez);
+
+                        if(carez.length>0)
+                        {
+                            for (var i = 0; i < carez.length; i++) {
+                                //console.log(carez[1][0]);
+                                firebase.database().ref('campaigns/'+ newPostKey).update({ AdminID:admin, ClientID: client, ProposalID: propid, Status: "Approved", Timestamp: dt}); 
+                                firebase.database().ref('campaigns/'+ newPostKey+'/data/'+carez[i][3]).update({name: carez[i][0],followers: carez[i][1],rate: carez[i][2],cost: carez[i][4]});
+                                
+                            }
+                            location.reload(); 
+                        }
+                        else{
+                          alert("Please select a data item!");
+                          //location.reload();
+                        }
+                                      
+}
+
+
+</script>
+</body>
+</html>
