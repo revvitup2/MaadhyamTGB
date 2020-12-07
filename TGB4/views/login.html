@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Firebase Server Auth</title>
+
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+  
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+    
+    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+  
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+  
+    <link rel="stylesheet" type="text/css" href="/css/util.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+
+    
+    <script
+      src="https://www.gstatic.com/firebasejs/7.22.1/firebase-auth.js"
+      defer
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"
+      defer
+    ></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+  </head>
+  <body>
+    <main>
+        <div class="limiter">
+          <div class="container-login100">
+            <div class="wrap-login100">
+              <div class="login100-pic js-tilt" data-tilt>
+                <img src="images/img-01.png" alt="IMG">
+              </div>
+      
+              <form id="login" class="login100-form validate-form">
+                <span class="login100-form-title">
+                  Login Page
+                </span>
+      
+                <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+                  <input class="input100" type="text" id="login" name="login" placeholder="Email"/>
+                  <span class="focus-input100"></span>
+                  <span class="symbol-input100">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                  </span>
+                </div>
+      
+                <div class="wrap-input100 validate-input" data-validate = "Password is required">
+                  <input class="input100" type="password" id="password" name="password" placeholder="Password"/>
+                  <span class="focus-input100"></span>
+                  <span class="symbol-input100">
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                  </span>
+                </div>
+                
+                <div class="container-login100-form-btn">
+                  <button class="login100-form-btn">
+                    Login
+                  </button>
+                </div>
+      
+                <div class="text-center p-t-12">
+                  <span class="txt1">
+                    Forgot
+                  </span>
+                  <a class="txt2" href="#">
+                    Username / Password?
+                  </a>
+                </div>
+      
+                <div class="text-center p-t-136">
+                  <a class="txt2" href="#">
+                    Admin Login
+                    <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <script>
+
+          window.addEventListener("DOMContentLoaded", () => {
+  
+            var firebaseConfig = {
+    apiKey: "AIzaSyBeKWzFNXwzmWrSeMXjVaSX_6HfYNiIXxU",
+    authDomain: "thegirlfriendbox-a277f.firebaseapp.com",
+    databaseURL: "https://thegirlfriendbox-a277f.firebaseio.com",
+    projectId: "thegirlfriendbox-a277f",
+    storageBucket: "thegirlfriendbox-a277f.appspot.com",
+    messagingSenderId: "28678379221",
+    appId: "1:28678379221:web:21f5b5d8aa046992ac745c",
+    measurementId: "G-6YK6D6YNHZ"
+  };
+  
+              firebase.initializeApp(firebaseConfig);
+  
+  
+            firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+
+
+arr1=[];
+arr2=[];
+firebase.database().ref('Admins/').once('value').then(function(snapshot) {
+     
+     var data = snapshot.val();
+     //console.log(data);
+     
+     snapshot.forEach(function(child){
+
+             arr1.push([child.key,child.val().emailId]);
+
+     });console.table(arr1);
+});
+
+firebase.database().ref('Clients/').once('value').then(function(snapshot) {
+     
+     var data = snapshot.val();
+     //console.log(data);
+     
+     snapshot.forEach(function(child){
+
+             arr2.push([child.key,child.val().emailId]);
+
+     });console.table(arr2);
+});
+
+  
+            document.getElementById("login").addEventListener("submit", (event) => {
+                  event.preventDefault();
+                const login = event.target.login.value;
+                const password = event.target.password.value;
+  
+                firebase.auth().signInWithEmailAndPassword(login, password).then(({ user }) => {
+                    return user.getIdToken().then((idToken) => {
+                      return fetch("/sessionLogin", {
+                        method: "POST",
+                        headers: {
+                          Accept: "application/json",
+                          "Content-Type": "application/json",
+                          "CSRF-Token": Cookies.get("XSRF-TOKEN"),
+                        },
+                        body: JSON.stringify({ idToken }),
+                      });
+                    });
+                  })
+
+                  
+                  .then(() => {
+                    var id = firebase.auth().currentUser.uid;
+                    console.log(id);
+                    localStorage.setItem('Uid', id);
+                    
+                    var em = firebase.auth().currentUser.email;
+
+                   
+                              for(i=0;i<arr1.length;i++)
+                              {
+                                if(em==arr1[i][1])
+                                {
+                                  
+                                  window.location.assign("/import");
+                                  //c = child.val().timestamp;
+                                }
+                              }
+                              for(i=0;i<arr2.length;i++)
+                              {
+                                if(em==arr2[i][1])
+                                {
+                                  window.location.assign("/campaigns");
+                                  //c = child.val().timestamp;
+                                }
+                              }
+                              
+
+
+                  });
+                return false;
+              });
+  
+  
+          });
+        </script>
+
+<!--===============================================================================================-->	
+<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+  <script src="/vendor/bootstrap/js/popper.js"></script>
+  <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+  <script src="/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+  <script src="/vendor/tilt/tilt.jquery.min.js"></script>
+  <script >
+    $('.js-tilt').tilt({
+      scale: 1.1
+    })
+  </script>
+<!--===============================================================================================-->
+  <script src="/js/main.js"></script>
+    </main>
+  </body>
+</html>
